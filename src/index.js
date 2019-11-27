@@ -1,7 +1,6 @@
 require('babel-register')({
     presets: ['es2015'],
 })
-const serverless = require('serverless-http')
 require('./scraper')
 const { wikiSearch, scrapeUrl, testStrategy, movieUrl } = require('./scraper')
 const R = require('ramda')
@@ -23,9 +22,9 @@ app.get('/reception/:title', (req, res) => {
 })
 
 app.get('/search/:title', (req, res) => {
-    console.log("/search/:title", req.params)
+    console.log('/search/:title', req.params)
     res.set({ 'Content-Type': 'application/json' })
-    console.log("a")
+    console.log('a')
     wikiSearch(req.params.title)
         .map(JSON.parse)
         .map(getFilm)
