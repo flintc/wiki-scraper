@@ -1,0 +1,12 @@
+node_modules
+*.log
+.vscode
+npm-debug.log
+.DS_Store
+/*.env
+
+#SERVERLESS STUFF
+admin.env
+.env
+_meta
+.serverless
