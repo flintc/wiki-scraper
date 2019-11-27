@@ -10,7 +10,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "fluture": "^7.2.2",
     "partial.lenses": "^14.17.0",
