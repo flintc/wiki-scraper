@@ -18,10 +18,6 @@
     "request": "^2.88.0",
     "sanctuary": "^0.13.2"
   },
-  "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^4.0.1"
-  },
   "prettier": {
     "semi": false,
     "trailingComma": "es5",
