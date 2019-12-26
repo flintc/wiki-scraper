@@ -6,6 +6,11 @@ const R = require('ramda')
 const F = require('fluture')
 const L = require('partial.lenses')
 const fs = require('fs')
+const cors = require('cors')
+
+const corsOptions = {
+  origin: 'https://flintc.github.io',
+}
 
 const express = require('express')
 const app = express()
@@ -32,7 +37,7 @@ const movieInfoResolver = R.curry((strategy, title) =>
 const resolveMovieTitles = movieInfoResolver(searchMovieTitles)
 const resolveMovieTitle = movieInfoResolver(getMovieTitle)
 
-app.get('/search/:title', (req, res) => {
+app.get('/search/:title', cors(corsOptions), (req, res) => {
   res.set({ 'Content-Type': 'application/json' })
   resolveMovieTitle(req.params.title)
     .pipe(F.map(L.get(0)))
