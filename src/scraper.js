@@ -1,33 +1,37 @@
 import R from 'ramda'
 import * as L from 'partial.lenses'
 import S from 'sanctuary'
-import Future from 'fluture'
+import Future, { encaseP } from 'fluture'
 import * as U from './utils/utils'
 import * as C from './utils/cheerio'
 import request from 'request'
+import fetch from 'isomorphic-fetch'
+import * as F from 'fluture'
 
 const searchUrl = term =>
   `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=${term}`
 
-export const wikiSearch = term =>
-  Future((rej, res) => {
-    const opts = { method: 'GET', uri: searchUrl(term) }
-    request(opts, (error, response, body) => {
-      if (error) {
-        rej(error)
-      } else {
-        res(body)
-      }
-    })
-  })
+// export const wikiSearch = term =>
+//   Future((rej, res) => {
+//     const opts = { method: 'GET', uri: movieUrl(term) }
+//     request(opts, (error, response, body) => {
+//       console.log('request result', body, error)
+//       if (error) {
+//         rej(error)
+//       } else {
+//         res(term)
+//       }
+//     })
+//   })
+
+const restUrl = title =>
+  `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`
 
 const movieUrl = title => `https://en.wikipedia.org/wiki/${title}`
 
 // scrapeUrl :: (Dom -> Either Err a) -> Url -> Future Err a
-const scrapeUrl = R.curry((strategy, url) =>
-  U.getHtml(url)
-    .map(C.loadDom)
-    .map(strategy)
+const scrapeUrl = R.curry((strategy, obj) =>
+  obj.pipe(F.map(C.loadDom)).pipe(F.map(strategy))
 )
 
 const getReception = S.encase(
@@ -101,8 +105,14 @@ const testStrategy = dom => {
   })
   return R.merge(
     L.modify(L.leafs, R.nAry(1, S.maybeToNullable), getMovieData(dom)),
-    getMoneyInfo(dom)
+    //getMoneyInfo(dom)
+    {}
   )
 }
+
+export const wikiSearch = term =>
+  F.encaseP(fetch)(movieUrl(term))
+    .pipe(F.chain(F.encaseP(x => x.text())))
+    .pipe(scrapeUrl(testStrategy))
 
 export { scrapeUrl, testStrategy, movieUrl }
