@@ -48,7 +48,7 @@ app.get('/search/:title', cors(corsOptions), (req, res) => {
     .pipe(F.fork(console.error)(R.compose(res.send.bind(res), JSON.stringify)))
 })
 
-app.get('/parse/:page', (req, res) => {
+app.get('/parse/:page', cors(corsOptions), (req, res) => {
   res.set({ 'Content-Type': 'application/json' })
   movieInfoResolver(x => y => [x], req.params.page)
     .pipe(F.map(L.get(0)))
