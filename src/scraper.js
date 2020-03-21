@@ -110,9 +110,16 @@ const testStrategy = dom => {
   )
 }
 
-export const wikiSearch = term =>
-  F.encaseP(fetch)(movieUrl(term))
+export const wikiSearch = term => {
+  return F.encaseP(fetch)(movieUrl(term))
     .pipe(F.chain(F.encaseP(x => x.text())))
     .pipe(scrapeUrl(testStrategy))
+}
+
+export const wikiParse = url => {
+  return F.encaseP(fetch)(`https://en.wikipedia.org/wiki/${url}`)
+    .pipe(F.chain(F.encaseP(x => x.text())))
+    .pipe(scrapeUrl(testStrategy))
+}
 
 export { scrapeUrl, testStrategy, movieUrl }
